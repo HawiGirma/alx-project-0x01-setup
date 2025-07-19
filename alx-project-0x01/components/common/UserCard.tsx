@@ -1,7 +1,7 @@
 import React from "react";
-import type { UserProps } from "@/interfaces/UserProps";
+import { UserProps } from "@/interfaces/UserProps";
 
-const UserCard: React.FC<UserProps> = ({ id, name, email, username }) => {
+const UserCard: React.FC<UserProps> = ({ id, name, username, email }) => {
   return (
     <div className="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
       <h2 className="text-xl font-semibold mb-1">{name}</h2>
