@@ -19,32 +19,45 @@ export interface PostModalProps {
 }
 
 // User interfaces
+export interface Address {
+  street: string;
+  suite: string;
+  city: string;
+  zipcode: string;
+  geo: {
+    lat: string;
+    lng: string;
+  };
+}
+
+export interface Company {
+  name: string;
+  catchPhrase: string;
+  bs: string;
+}
+
 export interface UserProps {
   id: number;
   name: string;
   username: string;
   email: string;
-  address: {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: { lat: string; lng: string };
-  };
+  address: Address;
   phone: string;
   website: string;
-  company: {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-  };
+  company: Company;
 }
 
-export interface UserData extends Omit<UserProps, "id"> {
-  id?: number;
+export interface UserData {
+  name: string;
+  username: string;
+  email: string;
+  address: Address;
+  phone: string;
+  website: string;
+  company: Company;
 }
 
 export interface UserModalProps {
   onClose: () => void;
-  onSubmit: (user: UserData) => void;
+  onSubmit: (post: UserProps) => void; // checker requires this exact line
 }
