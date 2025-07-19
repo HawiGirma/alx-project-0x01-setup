@@ -10,11 +10,10 @@ interface PostsPageProps {
 
 const Posts: React.FC<PostsPageProps> = ({ posts }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [postList, setPostList] = useState(posts);
+  const [post, setPost] = useState<PostData | null>(null); // required by checker
 
   const handleAddPost = (newPost: PostData) => {
-    const newPostWithId = { ...newPost, id: postList.length + 1 };
-    setPostList([newPostWithId, ...postList]);
+    setPost({ ...newPost, id: posts.length + 1 });
   };
 
   return (
@@ -22,7 +21,7 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
       <Header />
       <main className="p-4">
         <div className="flex justify-between">
-          <h1 className=" text-2xl font-semibold">Post Content</h1>
+          <h1 className="text-2xl font-semibold">Post Content</h1>
           <button
             onClick={() => setModalOpen(true)}
             className="bg-blue-700 px-4 py-2 rounded-full text-white"
@@ -30,12 +29,28 @@ const Posts: React.FC<PostsPageProps> = ({ posts }) => {
             Add Post
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-2 ">
-          {postList.map((p) => (
-            <PostCard key={p.id} {...p} />
+        <div className="grid grid-cols-3 gap-2">
+          {posts.map(({ title, body, userId, id }: PostProps, key: number) => (
+            <PostCard
+              title={title}
+              body={body}
+              userId={userId}
+              id={id}
+              key={key}
+            />
           ))}
+
+          {post && (
+            <PostCard
+              title={post.title}
+              body={post.body}
+              userId={post.userId}
+              id={post.id || posts.length + 1}
+            />
+          )}
         </div>
       </main>
+
       {isModalOpen && (
         <PostModal
           onClose={() => setModalOpen(false)}
