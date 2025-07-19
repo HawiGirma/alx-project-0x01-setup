@@ -1,4 +1,4 @@
-// Post Interfaces
+// Post interfaces
 export interface PostProps {
   userId: number;
   id: number;
@@ -18,46 +18,30 @@ export interface PostModalProps {
   onSubmit: (post: PostData) => void;
 }
 
-// User Interfaces
-export interface UserGeo {
-  lat: string;
-  lng: string;
-}
-
-export interface UserAddress {
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
-  geo: UserGeo;
-}
-
-export interface UserCompany {
-  name: string;
-  catchPhrase: string;
-  bs: string;
-}
-
+// User interfaces
 export interface UserProps {
   id: number;
   name: string;
   username: string;
   email: string;
-  address: UserAddress;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+    geo: { lat: string; lng: string };
+  };
   phone: string;
   website: string;
-  company: UserCompany;
+  company: {
+    name: string;
+    catchPhrase: string;
+    bs: string;
+  };
 }
 
-export interface UserData {
+export interface UserData extends Omit<UserProps, "id"> {
   id?: number;
-  name: string;
-  username: string;
-  email: string;
-  address: UserAddress;
-  phone: string;
-  website: string;
-  company: UserCompany;
 }
 
 export interface UserModalProps {

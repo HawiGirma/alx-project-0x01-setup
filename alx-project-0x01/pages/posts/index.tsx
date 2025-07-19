@@ -1,17 +1,54 @@
-import Head from "next/head";
-import Header from "@/components/layout/Header";
 import PostCard from "@/components/common/PostCard";
-import { PostProps } from "@/interfaces/PostProps";
+import PostModal from "@/components/common/PostModal";
+import Header from "@/components/layout/Header";
+import { PostData, PostProps } from "@/interfaces";
+import { useState } from "react";
 
 interface PostsPageProps {
   posts: PostProps[];
 }
 
-export async function getStaticProps() {
-  const res = await fetch(
-    "https://jsonplaceholder.typicode.com/posts?_limit=10"
+const Posts: React.FC<PostsPageProps> = ({ posts }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [postList, setPostList] = useState(posts);
+
+  const handleAddPost = (newPost: PostData) => {
+    const newPostWithId = { ...newPost, id: postList.length + 1 };
+    setPostList([newPostWithId, ...postList]);
+  };
+
+  return (
+    <div className="flex flex-col h-screen">
+      <Header />
+      <main className="p-4">
+        <div className="flex justify-between">
+          <h1 className=" text-2xl font-semibold">Post Content</h1>
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-700 px-4 py-2 rounded-full text-white"
+          >
+            Add Post
+          </button>
+        </div>
+        <div className="grid grid-cols-3 gap-2 ">
+          {postList.map((p) => (
+            <PostCard key={p.id} {...p} />
+          ))}
+        </div>
+      </main>
+      {isModalOpen && (
+        <PostModal
+          onClose={() => setModalOpen(false)}
+          onSubmit={handleAddPost}
+        />
+      )}
+    </div>
   );
-  const posts: PostProps[] = await res.json();
+};
+
+export async function getStaticProps() {
+  const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const posts = await response.json();
 
   return {
     props: {
@@ -20,23 +57,4 @@ export async function getStaticProps() {
   };
 }
 
-export default function PostsPage({ posts }: PostsPageProps) {
-  return (
-    <>
-      <Head>
-        <title>Posts</title>
-      </Head>
-
-      <Header />
-
-      <main className="p-6">
-        <h1 className="text-3xl font-bold mb-6">All Posts</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <PostCard key={post.id} {...post} />
-          ))}
-        </div>
-      </main>
-    </>
-  );
-}
+export default Posts;
