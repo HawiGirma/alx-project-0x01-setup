@@ -1,6 +1,7 @@
-import { UserProps } from "@/interfaces/UserProps";
+import React from "react";
+import type { UserProps } from "@/interfaces/UserProps";
 
-export default function UserCard({ id, name, email, username }: UserProps) {
+const UserCard: React.FC<UserProps> = ({ id, name, email, username }) => {
   return (
     <div className="bg-white rounded-xl shadow p-4 hover:shadow-md transition">
       <h2 className="text-xl font-semibold mb-1">{name}</h2>
@@ -9,4 +10,6 @@ export default function UserCard({ id, name, email, username }: UserProps) {
       <p className="text-gray-400 text-xs mt-2">User ID: {id}</p>
     </div>
   );
-}
+};
+
+export default UserCard;
